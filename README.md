@@ -1,4 +1,4 @@
-# amiga
+# amiga [![GoDoc](https://godoc.org/github.com/azzzak/amiga?status.svg)](https://godoc.org/github.com/azzzak/amiga)
 
 Golang connector for Asterisk Manager Interface (AMI).
 
