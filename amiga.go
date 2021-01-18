@@ -3,8 +3,10 @@ package amiga
 import (
 	"context"
 	"errors"
+	"fmt"
 	"math/rand"
 	"net/textproto"
+	"strings"
 	"sync"
 	"time"
 )
@@ -168,6 +170,26 @@ func (ami *Amiga) RegisterHandler(event string, f handler) {
 // UnregisterHandler for specific event.
 func (ami *Amiga) UnregisterHandler(event string) {
 	ami.remove <- event
+}
+
+// Populate fills up variables with value of fields of interest.
+func Populate(m map[string]string, p map[string]*string) error {
+	var lack []string
+
+	for k, v := range p {
+		if param, ok := m[k]; ok {
+			*v = param
+			continue
+		}
+		lack = append(lack, k)
+	}
+
+	if lack == nil {
+		return nil
+	}
+
+	ps := strings.Join(lack, ", ")
+	return fmt.Errorf("missing arguments: %s", ps)
 }
 
 // Close connection to AMI. After connection closed internal goroutines are stopped to prevent leaking. If you want to reconnect to AMI you have to create new amiga instance.
