@@ -36,9 +36,20 @@ func main() {
 	// new amiga instance, you may omit any handler, the order doesn't matter
 	ami := amiga.New(errHandler, onConnect, onEvent)
 
-	// register handlers for specific event
-	ami.RegisterHandler("QueueStatus", func(m map[string]string) {
-		fmt.Printf("queue %v\n", m)
+	// register handler for specific event
+	ami.RegisterHandler("FullyBooted", func(m map[string]string) {
+		fmt.Printf("boot %v\n", m)
+
+		// amiga.Populate helps you get fields of interest
+		var status, uptime string
+		err := amiga.Populate(m, map[string]*string{
+			"Status": &status,
+			"Uptime": &uptime,
+		})
+		if err != nil {
+			// error shows some fields are missing
+		}
+		fmt.Println(status, uptime)
 	})
 
 	// connect to asterisk
