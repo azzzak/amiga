@@ -15,6 +15,8 @@ import (
 	"fmt"
 
 	"github.com/azzzak/amiga"
+	"github.com/azzzak/amiga/action"
+	"github.com/azzzak/amiga/event"
 )
 
 func main() {
@@ -37,8 +39,8 @@ func main() {
 	ami := amiga.New(errHandler, onConnect, onEvent)
 
 	// register handler for specific event
-	ami.RegisterHandler("FullyBooted", func(m map[string]string) {
-		fmt.Printf("boot %v\n", m)
+	ami.RegisterHandler(event.FullyBooted, func(m map[string]string) {
+		fmt.Printf("booted %v\n", m)
 
 		// amiga.Populate helps you get fields of interest
 		var status, uptime string
@@ -64,7 +66,7 @@ func main() {
 	}
 
 	// send action
-	res, err := ami.Action("QueueStatus", map[string]string{
+	res, err := ami.Action(action.QueueStatus, map[string]string{
 		"ActionID": "7a67-b519-09fa",
 	})
 	if err != nil {
